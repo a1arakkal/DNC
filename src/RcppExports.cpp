@@ -53,11 +53,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// MH
+int MH(arma::mat& MH_draws, arma::mat& proposal_cov, arma::mat& x, arma::colvec& y, arma::colvec& mu, arma::mat& sigma, double& ratio);
+RcppExport SEXP _DNC_MH(SEXP MH_drawsSEXP, SEXP proposal_covSEXP, SEXP xSEXP, SEXP ySEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP ratioSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type MH_draws(MH_drawsSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type proposal_cov(proposal_covSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::colvec& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< arma::colvec& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double& >::type ratio(ratioSEXP);
+    rcpp_result_gen = Rcpp::wrap(MH(MH_draws, proposal_cov, x, y, mu, sigma, ratio));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_DNC_chol_inv", (DL_FUNC) &_DNC_chol_inv, 1},
     {"_DNC_log_post_fun", (DL_FUNC) &_DNC_log_post_fun, 5},
     {"_DNC_log_post_fun_dnc", (DL_FUNC) &_DNC_log_post_fun_dnc, 6},
+    {"_DNC_MH", (DL_FUNC) &_DNC_MH, 7},
     {NULL, NULL, 0}
 };
 

@@ -74,3 +74,35 @@ double log_post_fun_dnc(arma::colvec& params, arma::mat& x, arma::colvec& y,
   return out;
 }  
   
+// [[Rcpp::export]]
+
+int MH(arma::mat& MH_draws, arma::mat& proposal_cov,
+       arma::mat& x, arma::colvec& y, arma::colvec& mu, 
+       arma::mat& sigma, double& ratio){
+  int n = MH_draws.n_rows;
+  arma::colvec beta_proposal = arma::zeros<arma::colvec>(MH_draws.n_cols);
+  int acc_count = 0;
+  
+  // Obtain environment containing function
+  Rcpp::Environment package_env("package:MASS"); 
+
+  // Make function callable from C++
+  Rcpp::Function mvtnomrfun = package_env["mvrnorm"]; 
+  
+  for(int j = 1; j < n; j++){
+    MH_draws.row(j) = MH_draws.row(j-1);
+    arma::colvec temp = MH_draws.row(j).t();
+    beta_proposal = Rcpp::as<arma::colvec>(mvtnomrfun(1, temp, proposal_cov));
+    double unif = R::runif(0,1);    
+    double acc_prob = std::exp(log_post_fun_dnc(beta_proposal, x, y, mu, sigma, ratio) - 
+                                 log_post_fun_dnc(temp, x, y, mu, sigma, ratio));
+        
+    if(unif < acc_prob){
+      MH_draws.row(j) = beta_proposal.t();
+      acc_count =  acc_count + 1;
+    }
+    
+  }
+    
+  return acc_count;
+}  

@@ -13,3 +13,7 @@ log_post_fun_dnc <- function(params, x, y, mu, sigma, ratio) {
     .Call('_DNC_log_post_fun_dnc', PACKAGE = 'DNC', params, x, y, mu, sigma, ratio)
 }
 
+MH <- function(MH_draws, proposal_cov, x, y, mu, sigma, ratio) {
+    .Call('_DNC_MH', PACKAGE = 'DNC', MH_draws, proposal_cov, x, y, mu, sigma, ratio)
+}
+

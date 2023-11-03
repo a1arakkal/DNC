@@ -41,6 +41,7 @@ log_post_fun_dnc <- function(params, x, y, mu, sigma, ratio) {
 #'    Modifies supplied MH_draws matrix in place.
 #' 
 #' @import Rcpp
+#' @import MASS
 #' @useDynLib DNC   
 #' @export
 MH <- function(MH_draws, proposal_cov, x, y, mu, sigma, ratio) {
